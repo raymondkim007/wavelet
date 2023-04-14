@@ -16,28 +16,34 @@ class MyHandler implements URLHandler {
             if (myList.size() > 0) res += myList.get(myList.size() - 1);
             res += "}";
             return String.format("Raymond's List: s", res);
-        } else if (url.getPath().contains("/add")) {
-            String[] parameters = url.getQuery().split("=");
-            if (parameters[0].equals("s")) {
-                myList.add(parameters[1]);
-                return String.format("String \"%s\" added to ArrayList", parameters[1]);
-            }
-        } else if (url.getPath().contains("/search")) {
-            String[] parameters = url.getQuery().split("=");
-            if (parameters[0].equals("s")) {
-                ArrayList<String> resArray = new ArrayList<String>();
-                String substr = parameters[1];
-                for (int i = 0; i < myList.size(); i++)
-                    if (myList.get(i).contains(substr))
-                        resArray.add(myList.get(i));
-                String res = "{";
-                for (int i = 0; i < resArray.size() - 1; i++)
-                    res += resArray.get(i) + ", ";
-                if (resArray.size() > 0) res += resArray.get(resArray.size() - 1);
-                res += "}";
-                return String.format("Results: s", res);
-            }
         } else {
+            System.out.println("Path: " + url.getPath());
+
+            if (url.getPath().contains("/add")) {
+                String[] parameters = url.getQuery().split("=");
+                if (parameters[0].equals("s")) {
+                    myList.add(parameters[1]);
+                    return String.format("String \"%s\" added to ArrayList", parameters[1]);
+                }
+                return "No word given";
+            }
+
+            if (url.getPath().contains("/search")) {
+                String[] parameters = url.getQuery().split("=");
+                if (parameters[0].equals("s")) {
+                    ArrayList<String> resArray = new ArrayList<String>();
+                    String substr = parameters[1];
+                    for (int i = 0; i < myList.size(); i++)
+                        if (myList.get(i).contains(substr))
+                            resArray.add(myList.get(i));
+                    String res = "{";
+                    for (int i = 0; i < resArray.size() - 1; i++)
+                        res += resArray.get(i) + ", ";
+                    if (resArray.size() > 0) res += resArray.get(resArray.size() - 1);
+                    res += "}";
+                    return String.format("Results: s", res);
+                }
+            }
             return "404 Not Found!";
         }
     }
